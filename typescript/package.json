@@ -1,0 +1,23 @@
+{
+  "name": "affinity-algorithm-training",
+  "version": "1.0.0",
+  "description": "Affinity Algorithm Training | Facile.it",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "test": "jest",
+    "coverage": "jest --coverage",
+    "tslint": "tslint --project tsconfig.json",
+    "tslint-fix": "tslint --project tsconfig.json --fix"
+  },
+  "devDependencies": {
+    "@types/faker": "^4.1.9",
+    "@types/jest": "^25.1.2",
+    "@types/node": "^13.7.0",
+    "faker": "^4.1.0",
+    "jest": "^25.1.0",
+    "ts-jest": "^25.2.0",
+    "tslint": "^6.0.0",
+    "typescript": "^3.7.5"
+  }
+}

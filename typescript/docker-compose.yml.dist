@@ -1,0 +1,8 @@
+version: '3.7'
+services:
+  typescript:
+    image: training-typescript:latest
+    build: .
+    working_dir: /app
+    volumes:
+    - ./:/app

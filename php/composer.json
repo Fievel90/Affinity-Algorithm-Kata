@@ -1,0 +1,43 @@
+{
+    "name": "fievel90/affinity-algorithm-training",
+    "license": "MIT",
+    "type": "project",
+    "description": "Affinity Algorithm Training | Facile.it",
+    "autoload": {
+        "psr-4": {
+            "Training\\": "src"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\Training\\": "tests"
+        }
+    },
+    "require": {
+        "php": "^7.4"
+    },
+    "require-dev": {
+        "facile-it/facile-coding-standard": "@stable",
+        "friendsofphp/php-cs-fixer": "dev-master",
+        "fzaninotto/faker": "@stable",
+        "phpstan/phpstan": "@stable",
+        "phpstan/phpstan-phpunit": "@stable",
+        "phpunit/phpunit": "@stable"
+    },
+    "scripts": {
+        "cs-check": "php-cs-fixer fix --dry-run --diff",
+        "cs-fix": "php-cs-fixer fix --diff",
+        "phpstan": "vendor/bin/phpstan analyse -c phpstan.neon -n --no-progress -l 8 src tests",
+        "phpunit": "vendor/bin/phpunit -c phpunit.xml.dist"
+    },
+    "config": {
+        "platform": {
+            "php": "7.4"
+        },
+        "sort-packages": true,
+        "optimize-autoloader": true,
+        "apcu-autoloader": true,
+        "preferred-install": "dist"
+    },
+    "prefer-stable": true
+}

@@ -1,0 +1,15 @@
+version: '3.7'
+services:
+  php:
+    image: training-php:latest
+    build: .
+    working_dir: /app
+    environment:
+      XDEBUG_IDEKEY: PHPSTORM
+      XDEBUG_PORT: 9001
+      XDEBUG_HOST: host.docker.internal
+      XDEBUG_REMOTE_HANDLER: dbgp
+      PHP_IDE_CONFIG: serverName=TrainingPhp
+      XDEBUG_CONFIG: "idekey=PHPSTORM remote_enable=On remote_host=host.docker.internal remote_port=9001 remote_handler=dbgp"
+    volumes:
+    - ./:/app
