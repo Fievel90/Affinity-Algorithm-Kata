@@ -8,18 +8,18 @@ class Affinity
     private array $people;
 
     /** @var array<array<string, bool>> */
-    private array $affinities;
+    private array $likes;
 
     /**
      * Affinity constructor.
      *
      * @param array<string>              $people
-     * @param array<array<string, bool>> $affinities
+     * @param array<array<string, bool>> $likes
      */
-    public function __construct(array $people, array $affinities)
+    public function __construct(array $people, array $likes)
     {
         $this->people = $people;
-        $this->affinities = $affinities;
+        $this->likes = $likes;
     }
 
     /**
@@ -27,28 +27,18 @@ class Affinity
      */
     public function getGroups(): array
     {
-        $num = \count($this->people);
         $groups = [];
 
-        for ($i = 0; $i < (1 << $num); ++$i) {
+        $indexShift = 1 << \count($this->people);
+        for ($i = 0; $i < $indexShift; ++$i) {
             $group = [];
             $toExclude = false;
 
-            for ($j = 0; $j < $num; ++$j) {
-                if ((1 << $j) & $i) {
+            for ($j = 0; $j < \count($this->people); ++$j) {
+                $shiftSecondPerson = 1 << $j;
+                if ($shiftSecondPerson & $i) {
                     $group[] = $this->people[$j];
-
-                    for ($x = 0; $x < \count($group); ++$x) {
-                        for ($y = $x + 1; $y < \count($group); ++$y) {
-                            $first = $group[$x];
-                            $second = $group[$y];
-                            $check = ($this->affinities[$first][$second] ?? false);
-                            $iCheck = ($this->affinities[$second][$first] ?? false);
-                            if (false === $check || false === $iCheck) {
-                                $toExclude = true;
-                            }
-                        }
-                    }
+                    $toExclude = $this->checkAffinity($group, $toExclude);
                 }
             }
 
@@ -58,5 +48,28 @@ class Affinity
         }
 
         return $groups;
+    }
+
+    /**
+     * @param array<string> $group
+     * @param bool          $toExclude
+     *
+     * @return bool
+     */
+    protected function checkAffinity(array $group, bool $toExclude): bool
+    {
+        for ($x = 0; $x < \count($group); ++$x) {
+            for ($y = $x + 1; $y < \count($group); ++$y) {
+                $first = $group[$x];
+                $second = $group[$y];
+                $check = ($this->likes[$first][$second] ?? false);
+                $iCheck = ($this->likes[$second][$first] ?? false);
+                if (false === $check || false === $iCheck) {
+                    $toExclude = true;
+                }
+            }
+        }
+
+        return $toExclude;
     }
 }
