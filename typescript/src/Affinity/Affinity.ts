@@ -7,15 +7,6 @@ export default class Affinity {
         this.affinities = affinities;
     }
 
-    private hasAffinity(first: string, second: string) {
-        if (this.affinities.hasOwnProperty(first)
-            && this.affinities[first].hasOwnProperty(second)
-        ) {
-            return this.affinities[first][second] ?? false;
-        }
-        return false;
-    }
-
     public getGroups(): string[][] {
         const totalPeople : number = this.people.length;
         const groups : string[][] = [];
@@ -35,13 +26,7 @@ export default class Affinity {
                             const first : string = group[x];
                             const second : string = group[y];
 
-                            let check : boolean = false;
-                            let iCheck: boolean = false;
-
-                            check = this.hasAffinity(first,second) ?? false;
-                            iCheck = this.hasAffinity(second, first) ?? false;
-
-                            if (!check || !iCheck) {
+                            if (!this.hasAffinity(first,second) || !this.hasAffinity(second, first)) {
                                 toExclude = true;
                             }
                         }
@@ -56,4 +41,14 @@ export default class Affinity {
 
         return groups;
     }
+
+    private hasAffinity(first: string, second: string) {
+        if (this.affinities.hasOwnProperty(first)
+            && this.affinities[first].hasOwnProperty(second)
+        ) {
+            return this.affinities[first][second] ?? false;
+        }
+        return false;
+    }
+
 }
