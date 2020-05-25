@@ -7,16 +7,25 @@ export default class Affinity {
         this.affinities = affinities;
     }
 
+    private hasAffinity(first: string, second: string) {
+        if (this.affinities.hasOwnProperty(first)
+            && this.affinities[first].hasOwnProperty(second)
+        ) {
+            return this.affinities[first][second] ?? false;
+        }
+        return false;
+    }
+
     public getGroups(): string[][] {
-        const num : number = this.people.length;
+        const totalPeople : number = this.people.length;
         const groups : string[][] = [];
 
         // tslint:disable-next-line:no-bitwise
-        for (let i : number = 0; i < (1 << num); ++i) {
+        for (let i : number = 0; i < (1 << totalPeople); ++i) {
             const group : string[] = [];
             let toExclude : boolean = false;
 
-            for (let j : number = 0; j < num; ++j) {
+            for (let j : number = 0; j < totalPeople; ++j) {
                 // tslint:disable-next-line:no-bitwise
                 if ((1 << j) & i) {
                     group.push(this.people[j]);
@@ -29,17 +38,8 @@ export default class Affinity {
                             let check : boolean = false;
                             let iCheck: boolean = false;
 
-                            if (this.affinities.hasOwnProperty(first)
-                                && this.affinities[first].hasOwnProperty(second)
-                            ) {
-                                check = this.affinities[first][second] ?? false;
-                            }
-
-                            if (this.affinities.hasOwnProperty(second)
-                                && this.affinities[second].hasOwnProperty(first)
-                            ) {
-                                iCheck = this.affinities[second][first] ?? false;
-                            }
+                            check = this.hasAffinity(first,second) ?? false;
+                            iCheck = this.hasAffinity(second, first) ?? false;
 
                             if (!check || !iCheck) {
                                 toExclude = true;
