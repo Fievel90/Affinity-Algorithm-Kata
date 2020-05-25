@@ -20,17 +20,19 @@ export default class Affinity {
                 // tslint:disable-next-line:no-bitwise
                 if (this.getCombinations(j) & i) {
                     group.push(this.people[j]);
-                }
-            }
-            for (let x : number = 0; x < group.length; ++x) {
-                for (let y : number = x + 1; y < group.length; ++y) {
-                    const first : string = group[x];
-                    const second : string = group[y];
-                    if (!(this.hasAffinity(first,second) && this.hasAffinity(second, first))) {
-                        toExclude = true;
+
+                    for (let x : number = 0; x < group.length; ++x) {
+                        for (let y : number = x + 1; y < group.length; ++y) {
+                            const first : string = group[x];
+                            const second : string = group[y];
+                            if (!(this.hasAffinity(first,second) && this.hasAffinity(second, first))) {
+                                toExclude = true;
+                            }
+                        }
                     }
                 }
             }
+
             if (group.length > 1 && !toExclude) {
                 groups.push(group);
             }
@@ -39,10 +41,8 @@ export default class Affinity {
     }
 
     private getCombinations(totalPeople: number): number {
-        // tslint:disable-next-line:no-bitwise
         return Math.pow(2, totalPeople);
     }
-
 
     private hasAffinity(first: string, second: string) {
         if (this.affinities.hasOwnProperty(first)
