@@ -2,10 +2,12 @@
 
 namespace Training\Affinity;
 
+use function foo\func;
+
 class Affinity
 {
-    /** @var array<string> */
-    private array $people;
+    /** @var People */
+    private People $people;
 
     /** @var array<array<string, bool>> */
     private array $affinities;
@@ -18,8 +20,10 @@ class Affinity
      */
     public function __construct(array $people, array $affinities)
     {
-        $this->people = $people;
-        $this->affinities = $affinities;
+        $this->people = new People();
+        foreach ($people as $person) {
+            $this->people[] = new Person($person, $affinities[$person]);
+        }
     }
 
     /**
@@ -27,10 +31,10 @@ class Affinity
      */
     public function getGroups(): array
     {
-        $num = \count($this->people);
+        $num = $this->people->count();
         $groups = [];
 
-        for ($i = 0; $i < (1 << $num); ++$i) {
+        for ($i = 0; $i < $this->people->getCombinationCount(); ++$i) {
             $group = [];
             $toExclude = false;
 
@@ -42,9 +46,9 @@ class Affinity
                         for ($y = $x + 1; $y < \count($group); ++$y) {
                             $first = $group[$x];
                             $second = $group[$y];
-                            $check = ($this->affinities[$first][$second] ?? false);
-                            $iCheck = ($this->affinities[$second][$first] ?? false);
-                            if (false === $check || false === $iCheck) {
+//                            $check = ($this->affinities[$first][$second] ?? false);
+//                            $iCheck = ($this->affinities[$second][$first] ?? false);
+                            if (!$first->hasAffinity($second)) {
                                 $toExclude = true;
                             }
                         }
@@ -53,7 +57,7 @@ class Affinity
             }
 
             if (\count($group) > 1 && false === $toExclude) {
-                $groups[] = $group;
+                $groups[] = array_map(function($person) { return $person->getName();}, $group);
             }
         }
 
