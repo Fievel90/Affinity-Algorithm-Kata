@@ -25,6 +25,46 @@ class Affinity
     /**
      * @return array<array<string>>
      */
+    public function getGroups2(): array
+    {
+        $num = \count($this->people);
+        $groups = [];
+
+        for ($i = 0; $i < (1 << $num); ++$i) {
+            $group = [];
+
+            for ($j = 0; $j < $num; ++$j) {
+                if ((1 << $j) & $i) {
+                    $group[] = $this->people[$j];
+                    $inGroupCount = \count($group);
+
+                    //Confronta sequenzialmente ogni membro del gruppo
+                    for ($x = 0; $x < $inGroupCount; ++$x) {
+                        for ($y = $x + 1; $y < $inGroupCount; ++$y) {
+                            $first = $group[$x];
+                            $second = $group[$y];
+                            $check = ($this->affinities[$first][$second] ?? false);
+                            $iCheck = ($this->affinities[$second][$first] ?? false);
+                            if (false === $check || false === $iCheck) {
+                                // Non c'è bisogno di continuare
+                                continue 4;
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (\count($group) > 1) {
+                $groups[] = $group;
+            }
+        }
+
+        return $groups;
+    }
+
+    /**
+     * @return array<array<string>>
+     */
     public function getGroups(): array
     {
         $num = \count($this->people);
@@ -38,8 +78,10 @@ class Affinity
                 if ((1 << $j) & $i) {
                     $group[] = $this->people[$j];
 
-                    for ($x = 0; $x < \count($group); ++$x) {
-                        for ($y = $x + 1; $y < \count($group); ++$y) {
+                    $count = \count($group);
+
+                    for ($x = 0; $x < $count; ++$x) {
+                        for ($y = $x + 1; $y < $count; ++$y) {
                             $first = $group[$x];
                             $second = $group[$y];
                             $check = ($this->affinities[$first][$second] ?? false);

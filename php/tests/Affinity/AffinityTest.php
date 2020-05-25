@@ -29,9 +29,12 @@ class AffinityTest extends AbstractTestCase
 
         $affinity = new Affinity($people, $affinities);
         $groups = $affinity->getGroups();
+        $groups2 = $affinity->getGroups2();
 
         static::assertEquals($expected, $groups);
+        static::assertEquals($expected, $groups2);
         static::assertGroupsIntegrity($people, $affinities, $groups);
+        static::assertGroupsIntegrity($people, $affinities, $groups2);
     }
 
     /**
@@ -65,7 +68,6 @@ class AffinityTest extends AbstractTestCase
             'No people with 0% affinities' => [0, $empty],
             'Four people with 0% affinities' => [4, $empty],
             'Ten people with 0% affinities' => [10, $empty],
-
             'Four people with 100% affinities' => [4, $full],
             'Ten people with 100% affinities' => [10, $full],
 
