@@ -12,13 +12,13 @@ export default class Affinity {
         const groups : string[][] = [];
 
         // tslint:disable-next-line:no-bitwise
-        for (let i : number = 0; i < (1 << totalPeople); ++i) {
+        for (let i : number = 0; i < this.getCombinations(totalPeople); ++i) {
             const group : string[] = [];
             let toExclude : boolean = false;
 
             for (let j : number = 0; j < totalPeople; ++j) {
                 // tslint:disable-next-line:no-bitwise
-                if ((1 << j) & i) {
+                if (this.getCombinations(j) & i) {
                     group.push(this.people[j]);
 
                     for (let x : number = 0; x < group.length; ++x) {
@@ -33,14 +33,18 @@ export default class Affinity {
                     }
                 }
             }
-
             if (group.length > 1 && !toExclude) {
                 groups.push(group);
             }
         }
-
         return groups;
     }
+
+    private getCombinations(totalPeople: number): number {
+        // tslint:disable-next-line:no-bitwise
+        return Math.pow(2, totalPeople);
+    }
+
 
     private hasAffinity(first: string, second: string) {
         if (this.affinities.hasOwnProperty(first)
