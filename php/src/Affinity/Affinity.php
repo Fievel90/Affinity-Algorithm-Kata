@@ -58,6 +58,10 @@ class Affinity
      */
     protected function checkAffinity(array $group, bool $toExclude): bool
     {
+        if (true === $toExclude) {
+            return $toExclude;
+        }
+
         for ($x = 0; $x < \count($group); ++$x) {
             for ($y = $x + 1; $y < \count($group); ++$y) {
                 $first = $group[$x];
