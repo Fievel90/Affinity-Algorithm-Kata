@@ -7,14 +7,6 @@ export default class Affinity {
     this.affinities = affinities;
   }
 
-  // const people : string[] = ['Adah', 'Tianna', 'Sandy', 'Zora'];
-  // const affinities = {
-  //     'Adah': {'Adah' : false, 'Tianna' : true, 'Sandy' : true, 'Zora': true},
-  //     'Tianna': {'Adah' : true, 'Tianna' : false, 'Sandy' : true, 'Zora': true},
-  //     'Sandy': {'Adah' : true, 'Tianna' : true, 'Sandy' : false, 'Zora': true},
-  //     'Zora': {'Adah' : true, 'Tianna' : false, 'Sandy' : true, 'Zora' :false},
-  // };
-
   public getGroups(): string[][] {
     const num: number = this.people.length;
     const groups: string[][] = [];
@@ -30,19 +22,18 @@ export default class Affinity {
           group.push(this.people[j]);
 
           group.forEach((first) => {
+            if (toExclude) {
+              return false;
+            }
+
             group
               .filter((n) => n != first)
               .forEach((second) => {
-                let check: boolean = this.affinities[first][second] ?? false;
-                let iCheck: boolean = this.affinities[second][first] ?? false;
-
-                if (!check || !iCheck) {
-                  toExclude = true;
-                }
+                toExclude = this.isAlreadyExists(first, second);
               });
           });
-        } // fine 33
-      } // fine 31
+        } // fine 29
+      } // fine 27
 
       if (group.length > 1 && !toExclude) {
         groups.push(group);
@@ -50,5 +41,16 @@ export default class Affinity {
     }
 
     return groups;
+  }
+
+  isAlreadyExists(first: any, second: any): boolean {
+    let check: boolean = this.affinities[first][second] ?? false;
+    let iCheck: boolean = this.affinities[second][first] ?? false;
+
+    if (!check || !iCheck) {
+      return true;
+    }
+
+    return false;
   }
 }
