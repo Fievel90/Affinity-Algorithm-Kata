@@ -8,15 +8,15 @@ export default class Affinity {
     }
 
     public getGroups(): string[][] {
-        const totalPeople : number = this.people.length;
+        const totalPeopleLength : number = this.people.length;
         const groups : string[][] = [];
 
         // tslint:disable-next-line:no-bitwise
-        for (let i : number = 0; i < this.getCombinations(totalPeople); ++i) {
+        for (let i : number = 0; i < this.getCombinations(totalPeopleLength); ++i) {
             const group : string[] = [];
             let toExclude : boolean = false;
 
-            for (let j : number = 0; j < totalPeople; ++j) {
+            for (let j : number = 0; j < totalPeopleLength; ++j) {
                 // tslint:disable-next-line:no-bitwise
                 if (this.getCombinations(j) & i) {
                     group.push(this.people[j]);
@@ -26,7 +26,7 @@ export default class Affinity {
                             const first : string = group[x];
                             const second : string = group[y];
 
-                            if (!this.hasAffinity(first,second) || !this.hasAffinity(second, first)) {
+                            if (!(this.hasAffinity(first,second) && this.hasAffinity(second, first))) {
                                 toExclude = true;
                             }
                         }
