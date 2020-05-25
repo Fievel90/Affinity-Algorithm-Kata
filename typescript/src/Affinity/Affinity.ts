@@ -11,7 +11,6 @@ export default class Affinity {
         const totalPeopleLength : number = this.people.length;
         const groups : string[][] = [];
 
-        // tslint:disable-next-line:no-bitwise
         for (let i : number = 0; i < this.getCombinations(totalPeopleLength); ++i) {
             const group : string[] = [];
             let toExclude : boolean = false;
